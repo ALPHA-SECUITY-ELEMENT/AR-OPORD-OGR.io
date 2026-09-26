@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reforger OP Generator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>REFORGER OP GENERATOR</h1>
+  <span class="sub" id="terrainLabel">—</span>
+  <div class="tabs">
+    <button data-tab="gen" class="active">Generate</button>
+    <button data-tab="edit">Edit Terrain</button>
+    <button data-tab="data">Data</button>
+  </div>
+</header>
+<main>
+  <aside>
+    <div id="tab-gen">
+      <h2>Terrain</h2>
+      <select id="terrainSel"></select>
+      <label>Map image URL (optional override)</label>
+      <input id="mapUrl" placeholder="maps/takistan.jpg">
+      <h2>Regions</h2>
+      <div class="pin-list" id="regionList"></div>
+      <h2>Objective count</h2>
+      <input id="objCount" type="number" min="1" max="20" value="4">
+      <h2>Faction</h2>
+      <select id="factionSel">
+        <option>US</option><option>USSR</option>
+        <option>US (mod)</option><option>USSR (mod)</option>
+        <option>Custom</option>
+      </select>
+      <h2>SPICES modifiers</h2>
+      <div id="spiceChips"></div>
+      <button class="primary" id="genBtn" style="margin-top:14px">Generate Operation</button>
+      <div class="status" id="genStatus"></div>
+    </div>
+
+    <div id="tab-edit" class="hidden">
+      <h2>Terrain</h2>
+      <select id="editTerrainSel"></select>
+      <label>Display name</label>
+      <input id="editTerrainName">
+      <label>Map image URL</label>
+      <input id="editMapUrl">
+      <div class="row" style="margin-top:8px">
+        <button id="newTerrainBtn" class="ghost">+ New Terrain</button>
+        <button id="delTerrainBtn" class="ghost">Delete</button>
+      </div>
+      <h2>Regions</h2>
+      <div class="pin-list" id="editRegionList"></div>
+      <div class="row" style="margin-top:6px">
+        <button id="addRegionBtn" class="ghost">+ Add Region</button>
+        <button id="delRegionBtn" class="ghost">Delete</button>
+      </div>
+      <label>Region label (internal)</label>
+      <input id="editRegionName">
+      <label>Locations (one per line)</label>
+      <textarea id="editRegionLocations" placeholder="Compound Alpha&#10;Fuel Depot"></textarea>
+      <p class="meta">Click a region pin on the map to select it. Drag to reposition. Click empty map area to add a region. Region names are hidden on the map — only locations show in output.</p>
+      <div class="row" style="margin-top:8px">
+        <button id="exportBtn" class="primary">Export JSON</button>
+        <button id="importBtn" class="ghost">Import JSON</button>
+      </div>
+      <input id="importFile" type="file" accept=".json" class="hidden">
+      <div class="status" id="editStatus"></div>
+    </div>
+
+    <div id="tab-data" class="hidden">
+      <h2>Storage</h2>
+      <p class="meta">Terrains live in localStorage. Export to persist, import to restore or share.</p>
+      <div class="row">
+        <button id="exportAllBtn" class="primary">Export all terrains</button>
+        <button id="resetBtn" class="ghost">Reset to seed</button>
+      </div>
+      <h2>Raw JSON</h2>
+      <textarea id="rawJson" style="min-height:300px;font-size:11px"></textarea>
+      <button class="primary" id="applyRawBtn" style="margin-top:6px">Apply raw JSON</button>
+      <div class="status" id="dataStatus"></div>
+    </div>
+  </aside>
+
+  <section class="main">
+    <div id="view-gen" class="hidden">
+      <div class="map-wrap" id="genMapWrap">
+        <img id="genMap" alt="terrain map" style="display:none">
+        <div class="overlay" id="genOverlay"></div>
+      </div>
+      <h2 style="margin-top:18px">Operation output</h2>
+      <div class="row">
+        <button class="primary" id="copyBriefBtn">Copy OPORD</button>
+        <button class="ghost" id="copyPromptBtn">Copy ChatGPT prompt</button>
+      </div>
+      <pre class="out" id="genOut">Select regions and hit Generate.</pre>
+      <div class="meta" id="genMeta"></div>
+    </div>
+
+    <div id="view-edit" class="hidden">
+      <div class="map-wrap" id="editMapWrap">
+        <img id="editMap" alt="terrain map" style="display:none">
+        <div class="overlay" id="editOverlay"></div>
+      </div>
+      <p class="meta">Click empty map area to add a region pin at that spot. Drag existing pins to reposition. Click a pin to select it. Region names never render on the map.</p>
+    </div>
+
+    <div id="view-data" class="hidden">
+      <h2>Terrains registry</h2>
+      <pre class="out" id="dataOut"></pre>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
